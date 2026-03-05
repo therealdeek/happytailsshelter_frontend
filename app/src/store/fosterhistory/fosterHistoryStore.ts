@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/services/authService";
-import type { Animal, FosterHistory } from "@/types/types";
+import type { FosterHistory } from "@/types/types";
 import { create } from "zustand";
 
 interface FosterHistoryState {
@@ -19,19 +19,6 @@ interface FosterHistoryState {
   setSelectedFosterHistory: (fosterHistory: FosterHistory | null) => void;
 }
 
-const mapAnimalToHistory = (history: FosterHistory): FosterHistory => ({
-  ...history,
-  animal: {
-    animal_id: history.animal_id,
-    photo_url: history.photo_url,
-    microchip: history.microchip,
-    name: history.name,
-    species: history.species,
-    breed: history.breed,
-    date_of_birth: history.date_of_birth,
-  } as Animal,
-});
-
 export const useFosterHistoryStore = create<FosterHistoryState>((set) => ({
   fosterHistory: [],
   selectedFosterHistory: null,
@@ -44,7 +31,7 @@ export const useFosterHistoryStore = create<FosterHistoryState>((set) => ({
       const response = (
         await axiosInstance.get<{ data: FosterHistory[] }>("foster-history")
       ).data;
-      set({ fosterHistory: response.data.map(mapAnimalToHistory) });
+      set({ fosterHistory: response.data });
     } catch (error) {
       set({ error: "Failed to fetch foster history" });
     } finally {
@@ -60,7 +47,7 @@ export const useFosterHistoryStore = create<FosterHistoryState>((set) => ({
           `foster-history/user/${userId}`
         )
       ).data;
-      set({ fosterHistory: response.data.map(mapAnimalToHistory) });
+      set({ fosterHistory: response.data });
     } catch (error) {
       set({ error: "Failed to fetch user foster history" });
     } finally {
@@ -76,7 +63,7 @@ export const useFosterHistoryStore = create<FosterHistoryState>((set) => ({
           `foster-history/animal/${animalId}`
         )
       ).data;
-      set({ fosterHistory: response.data.map(mapAnimalToHistory) });
+      set({ fosterHistory: response.data });
     } catch (error) {
       set({ error: "Failed to fetch animal foster history" });
     } finally {
@@ -105,10 +92,7 @@ export const useFosterHistoryStore = create<FosterHistoryState>((set) => ({
       ).data;
 
       set((state) => ({
-        fosterHistory: [
-          ...state.fosterHistory,
-          mapAnimalToHistory(response.data),
-        ],
+        fosterHistory: [...state.fosterHistory, response.data],
       }));
     } catch (error) {
       set({ error: "Failed to create foster history" });
@@ -131,7 +115,7 @@ export const useFosterHistoryStore = create<FosterHistoryState>((set) => ({
       set((state) => ({
         fosterHistory: state.fosterHistory.map((f) =>
           f.foster_history_id === fosterHistory.foster_history_id
-            ? mapAnimalToHistory(response.data)
+            ? response.data
             : f
         ),
       }));

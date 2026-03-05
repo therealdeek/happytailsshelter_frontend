@@ -1,13 +1,11 @@
-import { useState, type FC, useContext } from "react";
-import { ADMIN_ROLE, type Animal, type MedicalLog } from "@/types/types";
+import { useState, type FC } from "react";
+import { type Animal, type MedicalLog } from "@/types/types";
 import { calculateAge } from "@/lib/utils";
 import { Camera } from "lucide-react";
 import { useMedicalLogStore } from "@/store/medicalLog/medicalLogStore";
 import { Button } from "./ui/button";
 import { ManageMedicalLogForm } from "./form/manageMedicalLogForm";
 import { Modal } from "./modal/modal";
-import { GlobalContext } from "@/hooks/GlobalContext";
-import FosterHistoryTable from "./FosterHistoryTable";
 import { STATUS_LABELS, STATUS_STYLES } from "@/constants";
 
 export interface AnimalProfileProps {
@@ -15,8 +13,6 @@ export interface AnimalProfileProps {
 }
 
 const AnimalProfile: FC<AnimalProfileProps> = ({ animal }) => {
-  const { user } = useContext(GlobalContext);
-
   const dateOfBirth = animal.date_of_birth
     ? new Date(animal.date_of_birth)
     : null;
@@ -44,7 +40,7 @@ const AnimalProfile: FC<AnimalProfileProps> = ({ animal }) => {
   };
 
   return (
-    <div className="flex flex-col gap-6 max-w-2xl mx-auto">
+    <div className="flex flex-col gap-6 mx-auto">
       {/* Animal Card */}
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="md:flex">

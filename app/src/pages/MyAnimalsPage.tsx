@@ -37,25 +37,20 @@ const MyAnimalsPage: FC<MyAnimalsPageProps> = () => {
           You currently have no animals assigned to you.
         </p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {fosterHistory.map(
-            (fosterHistoryLog: {
-              animal_id: Key | null | undefined;
-              animal: Animal;
-            }) => {
-              return (
-                <div
-                  key={fosterHistoryLog.animal.animal_id}
-                  onClick={() =>
-                    handleAnimalClick(fosterHistoryLog.animal?.animal_id)
-                  }
-                  className="cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  <AnimalProfile animal={fosterHistoryLog.animal} />
-                </div>
-              );
-            }
-          )}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {fosterHistory.map((fosterHistoryLog) => {
+            return (
+              <div
+                key={fosterHistoryLog.animal.animal_id}
+                onClick={() =>
+                  handleAnimalClick(fosterHistoryLog.animal?.animal_id)
+                }
+                className="cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <AnimalProfile animal={fosterHistoryLog.animal} />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
